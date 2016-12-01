@@ -1,0 +1,56 @@
+@using static ICICore.Web.Views.ViewExecutor
+@model ICICore.Web.ViewModels.Usuario
+@{
+	var alerta = default(ResultadoOperacao);
+	if (TempData.ContainsKey(nameof(ResultadoOperacao)))
+	{
+		alerta = TempData[nameof(ResultadoOperacao)] as ResultadoOperacao;
+	}
+}
+@if (alerta != null)
+{
+	<ici-alerta tipo="alerta.Resultado">@alerta.Mensagem</ici-alerta>
+}
+	<div class="panel panel-default">
+		<div class="panel-heading"></div>
+		<div class="panel-body">
+				<div ici-form-group="Perfil">
+					<label asp-for="Perfil"></label>
+					<input asp-for="Perfil" ici-controle="Perfil" />
+					<span asp-validation-for="Perfil"></span>
+				</div>
+	</div>
+</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">Dados Gerais</div>
+		<div class="panel-body">
+				<div ici-form-group="Nome">
+					<label asp-for="Nome"></label>
+					<input asp-for="Nome" ici-controle="Nome" />
+					<span asp-validation-for="Nome"></span>
+				</div>
+				<div ici-form-group="DataAdmissao">
+					<label asp-for="DataAdmissao"></label>
+					<div class="input-group date">
+						<span class="input-group-addon icone-calendario"></span>
+						<input asp-for="DataAdmissao" ici-controle="DataAdmissao" />
+					</div>
+					<span asp-validation-for="DataAdmissao"></span>
+				</div>
+	</div>
+</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">Sistema</div>
+		<div class="panel-body">
+				<div ici-form-group="Status">
+					<label asp-for="Status"></label>
+					<input asp-for="Status" ici-controle="Status" />
+					<span asp-validation-for="Status"></span>
+				</div>
+					<div ici-form-group="PerfilId" class="sem-linha">
+						<label asp-for="PerfilId"></label>
+						<ici-controle-multiplo asp-for="PerfilId" asp-items="ViewBag.Perfil" />
+						<span asp-validation-for="PerfilId"></span>
+					</div>
+	</div>
+</div>

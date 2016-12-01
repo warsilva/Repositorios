@@ -1,0 +1,44 @@
+﻿@model ICICore.Web.ViewModels.Login
+@{
+	Layout = "_LayoutLogin";
+}
+<h1>FRAMEWORK</h1>
+<form asp-action="Login">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div ici-form-group="Usuario">
+				<div class="input-group">
+					<div class="input-group-addon icone-usuario"></div>
+					<input ici-controle="Usuario" asp-for="Usuario">
+				</div>
+			</div>
+
+			<div ici-form-group="Senha">
+				<div class="input-group">
+					<div class="input-group-addon icone-cadeado"></div>
+					<input ici-controle="Senha" asp-for="Senha">
+				</div>
+			</div>
+			<div class="sem-linha" ici-form-group="LembrarSenha">
+				<div class="checkbox">
+					<label>
+						<input asp-for="LembrarSenha" ici-controle="LembrarSenha" />
+						<ici-display-name asp-for="LembrarSenha" />
+					</label>
+				</div>
+			</div>
+			<div class="linha-botao">
+				<button class="btn btn-primary btn-block" type="submit">Entrar</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="row links">
+		<div class="col-md-6 col-sm-6">
+			<a asp-controller="Inicio" asp-action="Acesso">Esqueceu sua senha?</a>
+		</div>
+		<div class="col-md-6 col-sm-6">
+			<a asp-controller="Inicio" asp-action="Acesso">Não possui acesso?</a>
+		</div>
+	</div>
+</form>

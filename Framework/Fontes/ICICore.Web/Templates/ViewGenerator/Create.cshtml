@@ -1,0 +1,62 @@
+﻿@using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore
+@@model @Model.ViewDataTypeName
+@{
+	if (Model.IsPartialView)
+	{
+	}
+	else if (Model.IsLayoutPageSelected)
+	{
+@:@@{
+	@:ViewData["Titulo"] = "Inserir";
+	if (!string.IsNullOrEmpty(Model.LayoutPageFile)) {
+		@:Layout = "@Model.LayoutPageFile";
+}
+@:}
+} else {
+	@:@@{
+		@:Layout = null;
+	@:}
+	@:
+	@:<!DOCTYPE html>
+	@:
+	@:<html>
+	@:<head>
+		@:<meta charset="utf-8" />
+		@:<meta name="viewport" content="width=device-width" />
+		@:<title>@@ViewData["Titulo"]</title>
+	@:</head>
+	@:<body>
+	@:
+}
+@:<div class="row div-titulo">
+	@:<div class="col-md-12">
+		@:<h2>Cadastro de <ici-titulo /></h2>
+	@:</div>
+	@:<div class="col-sm-12 col-md-9 col-lg-10">
+		@:<ici-migalha />
+	@:</div>
+@:</div>
+@: 
+@:<form asp-action="Inserir">
+	@:@@Html.Partial("_Visualizar")
+	@:
+	@:<div class="row">
+		@:<div class="col-md-12 text-right linha-botao">
+			@:<a href="javascript:history.back()" class="btn btn-secundary">Voltar</a>
+			@:<button class="btn btn-secundary" type="reset">Limpar</button>
+			@:<button class="btn btn-primary" type="submit">Salvar</button>
+		@:</div>
+	@:</div>
+@:</form>
+if (Model.ReferenceScriptLibraries) {
+@:@@section Scripts {
+	@:@@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@:}
+}
+// The following code closes the tag used in the case of a view using a layout page and the body and html tags in the case of a regular view page
+if (!Model.IsPartialView && !Model.IsLayoutPageSelected)
+{
+	@:</body>
+	@:</html>
+}
+}

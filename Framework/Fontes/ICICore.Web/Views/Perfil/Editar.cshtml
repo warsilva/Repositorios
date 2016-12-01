@@ -1,0 +1,35 @@
+@model ICICore.Web.ViewModels.Perfil
+@{
+	ViewData["Titulo"] = "Editar";
+}
+<div class="row div-titulo">
+	<div class="col-md-12">
+		<h2>Edição de <ici-titulo /></h2>
+	</div>
+	<div class="col-sm-12 col-md-9 col-lg-10">
+		<ici-migalha />
+	</div>
+</div>
+ 
+<form asp-action="editar">
+	@Html.Partial("_Visualizar")
+	
+	<div class="row">
+		<div class="col-md-12 text-right linha-botao">
+			<a href="javascript:history.back()" class="btn btn-secundary">Voltar</a>
+			<button class="btn btn-secundary" type="button" ici-modal="modalExcluir">Excluir</button>
+			<button class="btn btn-primary" type="submit" id="btnSalvar" name="Salvar">Salvar</button>
+		</div>
+	</div>
+	<ici-modal id="modalExcluir" titulo="Exclusão" tamanho="Pequena">
+		<ici-modal-body>Deseja realmente excluir?</ici-modal-body>
+		<ici-modal-footer>
+			<button class="btn btn-secundary" type="button" data-dismiss="modal">Não</button>
+			<button class="btn btn-primary" type="submit" id="btnExcluir" name="Excluir" formnovalidate formaction="/Perfil/Excluir/@(Model.Id)">Sim</button>
+		</ici-modal-footer>
+	</ici-modal>
+</form>
+
+@section Scripts {
+	@{Html.RenderPartial("_ValidationScriptsPartial");}
+}

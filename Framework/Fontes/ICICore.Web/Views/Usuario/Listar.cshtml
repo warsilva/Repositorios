@@ -1,0 +1,68 @@
+@using static ICICore.Web.Views.ViewExecutor
+@model ICICore.Web.ViewModels.Usuario
+@{
+	var listagem = ViewData["Listagem"] as IEnumerable<ICICore.Web.ViewModels.Usuario>;
+	var alerta = default(ResultadoOperacao);
+	if (TempData.ContainsKey(nameof(ResultadoOperacao)))
+	{
+		alerta = TempData[nameof(ResultadoOperacao)] as ResultadoOperacao;
+	}
+}
+@{
+	ViewData["Titulo"] = "Listar";
+}
+<div class="row div-titulo">
+	<div class="col-md-12">
+		<h2>Consulta de <ici-titulo tipo="Plural" /></h2>
+	</div>
+	<div class="col-sm-12 col-md-9 col-lg-10">
+		<ici-migalha />
+	</div>
+	<div class="col-sm-12 col-md-3 col-lg-2">
+		<a asp-action="Inserir" class="btn btn-primary">+ Novo Cadastro</a>
+	</div>
+</div>
+@if (alerta != null)
+{
+	<ici-alerta tipo="alerta.Resultado">@alerta.Mensagem</ici-alerta>
+}
+<form asp-action="listar" method="get">
+	<div class="panel panel-default">
+		<div class="panel-heading">Filtros de Pesquisa</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-4">
+						<div ici-form-group="Nome">
+							<label asp-for="Nome"></label>
+							<input type="select-multiplo" asp-for="Nome" ici-controle="Nome" />
+							<span asp-validation-for="Nome"></span>
+						</div>
+				</div>
+				<div class="col-md-4">
+					<button class="btn btn-secundary" type="submit">Filtrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<div class="panel panel-default">
+	<div class="panel-heading">Resultados de <ici-titulo tipo="Plural" /></div>
+	<div class="panel-body">
+		@(Html
+            .Grid(listagem)
+            .Build(columns =>
+            {
+                columns.Add(model => model.Id).Titled("Id");
+                columns.Add(model => model.Nome).Titled("Nome");
+                columns.Add(model => model).Encoded(false).RenderedAs(model => Html.ActionLink("Editar", "Editar", new { model.Id }));
+                columns.Add(model => model).Encoded(false).RenderedAs(model => Html.ActionLink("Excluir", "excluir", new { model.Id }));
+            })
+            .Sortable()
+            .Pageable(pager =>
+            {
+                pager.CurrentPage = ViewBag.PaginaAtual;
+                pager.RowsPerPage = ViewBag.Registros;
+            })
+		)
+	</div>
+</div>

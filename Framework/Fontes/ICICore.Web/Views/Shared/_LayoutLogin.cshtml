@@ -1,0 +1,24 @@
+﻿@{
+	var Config = new Configuracao();
+}
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Login - @Config.Comum.Aplicacao</title>
+	<link rel="stylesheet" href="//cdn.ici.curitiba.org.br/scripts/bootstrap/3.3.6/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="//cdn.ici.curitiba.org.br/scripts/icicore/1.0.0.0/css/core.min.css" />
+</head>
+<body class="login">
+	<div class="col-md-4 col-md-offset-4 col-xs-10 col-xs-offset-1">
+		@RenderBody()
+	</div>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/jquery-2.2.1.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/plugins/validation/jquery.validate-1.15.1.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/plugins/validation/jquery.validate.unobtrusive-3.2.6.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/icicore/1.0.0.0/js/core.min.js"></script>
+
+</body>
+</html>

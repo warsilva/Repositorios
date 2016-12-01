@@ -1,0 +1,27 @@
+@model ICICore.Web.ViewModels.Usuario
+@{
+    ViewData["Titulo"] = "Inserir";
+}
+<div class="row div-titulo">
+    <div class="col-md-12">
+        <h2>Cadastro de <ici-titulo /></h2>
+    </div>
+    <div class="col-sm-12 col-md-9 col-lg-10">
+        <ici-migalha />
+    </div>
+</div>
+
+<form asp-action="Inserir">
+     @Html.Partial("_Visualizar")
+
+    <div class="row">
+        <div class="col-md-12 text-right linha-botao">
+            <a href="javascript:history.back()" class="btn btn-secundary">Voltar</a>
+            <button class="btn btn-secundary" type="reset">Limpar</button>
+            <button class="btn btn-primary" type="submit">Salvar</button>
+        </div>
+    </div>
+</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

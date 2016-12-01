@@ -1,0 +1,44 @@
+﻿<blockquote>
+	Página Inicial
+</blockquote>
+<ici-alerta tipo="@TipoAlerta.Erro">Lorem <strong>ipsum</strong> dolor sit amet</ici-alerta>
+<ici-alerta tipo="@TipoAlerta.Sucesso">Lorem ipsum dolor sit amet</ici-alerta>
+<ici-alerta tipo="@TipoAlerta.Alerta">Lorem ipsum dolor sit amet</ici-alerta>
+
+<ici-barra-progresso valor-atual="80" />
+<ici-barra-progresso valor-atual="40" valor-total="70" gradiente="false" />
+<ici-barra-progresso valor-atual="20" animacao="true" />
+
+<button ici-modal="teste" class="btn btn-primary">Modal em botão</button>
+<a ici-modal="teste1">Modal em link</a>
+<span ici-modal="teste2">Modal em span</span>
+
+<ici-modal id="teste" titulo="Título Modal Pequena" tamanho="@TamanhoModal.Pequena">
+	<ici-modal-body>
+		Lorem ipsum dolor sit amet
+	</ici-modal-body>
+</ici-modal>
+<ici-modal id="teste1" titulo="Título Modal Grande" tamanho="@TamanhoModal.Grande">
+	<ici-modal-body>
+		Lorem ipsum dolor sit amet
+	</ici-modal-body>
+	<ici-modal-footer>
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary">Save changes</button>
+	</ici-modal-footer>
+</ici-modal>
+<ici-modal id="teste2">
+	<ici-modal-body>
+		Lorem ipsum dolor sit amet
+	</ici-modal-body>
+	<ici-modal-footer>
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-primary">Save changes</button>
+	</ici-modal-footer>
+</ici-modal>
+
+<div class="clearfix"></div>
+<button type="button" class="btn btn-default" ici-accordion="collapseCep">Não sei meu CEP</button>
+<ici-accordion id="collapseCep">
+	Accordion
+</ici-accordion>

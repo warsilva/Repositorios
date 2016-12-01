@@ -1,0 +1,116 @@
+﻿@{
+	var config = new Configuracao();
+}
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Titulo"] - @config.Comum.Aplicacao</title>
+
+	<link rel="stylesheet" href="//cdn.ici.curitiba.org.br/scripts/bootstrap/3.3.6/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="//cdn.ici.curitiba.org.br/css/jquery/plugins/rangeslider/rangeslider-2.2.1.min.css" />
+	<link rel="stylesheet" href="//cdn.ici.curitiba.org.br/css/jquery/plugins/dropzone/dropzone-1.0.0.min.css" />
+	<link rel="stylesheet" href="//cdn.ici.curitiba.org.br/css/jquery/plugins/select2/select2-4.0.3.min.css" />
+	<link rel="stylesheet" href="//cdn.ici.curitiba.org.br/css/jquery/plugins/custom-file-input/custom-file-input-1.0.0.min.css" />
+	<link rel="stylesheet" href="//cdn.ici.curitiba.org.br/css/jquery/plugins/bootstrap-datepicker/bootstrap-datepicker-1.6.4.min.css" />
+	<link rel="stylesheet" href="//cdn.ici.curitiba.org.br/scripts/icicore/1.0.0.0/css/core.min.css" />
+</head>
+<body class="barra-lateral-body">
+	<div class="div-geral">
+
+		<header>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-8 col-md-9 col-lg-10">
+						<button id="btnMenu" type="button" data-toggle="offcanvas" class="botao-menu">
+							<span>
+								<span></span>
+							</span>
+						</button>
+						<h1>@config.Comum.Aplicacao</h1>
+					</div>
+					@{await Html.RenderPartialAsync("_LoginPartial");}
+				</div>
+			</div>
+		</header>
+
+		<div class="conteudo-principal">
+			<aside id="barraLateral" class="barra-lateral">
+				<section class="barra-lateral-conteudo">
+					<div class="div-pesquisa">
+						<input type="search" placeholder="Pesquisar..." />
+						<span class="icone-lupa"></span>
+					</div>
+					<nav>
+						<ul class="nav">
+							<li>
+								<a href="~/">
+									<span class="icone-casa"></span>
+									<span>Início</span>
+								</a>
+							</li>
+							<li class="submenu">
+								<a href="#" role="button">
+									<span class="icone-pasta"></span>
+									<span>Cadastros</span>
+								</a>
+								<ul class="arvore-links">
+									<li>
+										<a href="~/perfil">Perfil</a>
+										<ul>
+											<li><a href="~/perfil/inserir">Novo Perfil</a></li>
+										</ul>
+									</li>
+									<li>
+										<a href="~/usuario">Usuário</a>
+										<ul>
+											<li><a href="~/usuario/inserir">Novo Usuário</a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a href="#">
+									<span class="icone-clipes"></span>
+									<span>Segurança</span>
+								</a>
+							</li>
+							<li>
+								<a href="~/Configuracao/index">
+									<span class="icone-engrenagem"></span>
+									<span>Configurações</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</section>
+			</aside>
+
+			<main>
+				<div class="conteudo container-fluid">
+					@RenderBody()
+				</div>
+			</main>
+			<footer></footer>
+		</div>
+	</div>
+
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/jquery-2.2.1.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/plugins/maskedinput/maskedinput-1.4.1.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/plugins/custom-file-input/custom-file-input-1.0.0.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/plugins/rangeslider/rangeslider-2.2.1.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/plugins/dropzone/dropzone-1.0.0.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/plugins/select2/select2-4.0.3.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/plugins/select2/select2-4.0.3.pt-BR.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/plugins/multiselect/multiselect-2.3.1.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/plugins/mvc-grid/mvc-grid-0.9.0.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/plugins/bootstrap-datepicker/bootstrap-datepicker-1.6.4.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/jquery/plugins/bootstrap-datepicker/bootstrap-datepicker-1.6.4.pt-BR.min.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/ckeditor/4.6.0/ckeditor.js"></script>
+	<script src="//cdn.ici.curitiba.org.br/scripts/icicore/1.0.0.0/js/core.min.js"></script>
+
+	@RenderSection("scripts", required: false)
+</body>
+</html>

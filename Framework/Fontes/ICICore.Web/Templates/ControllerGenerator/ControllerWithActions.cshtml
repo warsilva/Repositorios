@@ -1,0 +1,143 @@
+@using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Controller;
+@using Microsoft.VisualStudio.Web.CodeGeneration.Templating;
+@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+@{
+	string controllerName = Model.ClassName;
+	string routePrefix = controllerName.EndsWith("Controller")
+		? controllerName.Substring(0, controllerName.Length - 10)
+		: controllerName;
+	routePrefix = routePrefix.ToLower();
+
+}
+////<!--
+using AutoMapper;
+using ICICore.Mvc.Web;
+using ICICore.Mvc.Web.Atributos;
+using ICICore.Mvc.Web.Controllers;
+using ICICore.Web.Configuracoes;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+
+
+namespace ICICore.Web.Controllers
+{
+	/// <summary>
+	/// Controlador de '@routePrefix'.
+	/// </summary>
+	public class @controllerName : BaseController
+	{
+		/// <summary>
+		/// Construtor.
+		/// Atribui as dependências do controller.
+		/// </summary>
+		/// <param name="mapper">Dependência do AutoMapper.</param>
+		/// <param name="config">Dependência do Config.</param>
+		public @(controllerName)(IMapper mapper, Configuracao config) : base(mapper, config)
+		{
+			//to-do: implementar
+			/*
+			Inserir aqui as dependências que o controller for utilizar e atualize os parâmetros se necessário.
+			As dependências são instanciadas na classe Startup e 'injetadas' através dos construtores.
+			*/
+		}
+
+		[Route("/@routePrefix")]
+		[Route("/@routePrefix/listar")]
+		[Route("/@routePrefix/pagina-{pagina}")]
+		[Route("/@routePrefix/listar/pagina-{pagina}")]
+		public IActionResult Listar(int pagina = 1, dynamic modeloPesq = null)
+		{
+			//to-do: implementar
+			/*
+			Tipar o modeloPesq corretamente (mudar dynamic para classe de viewmodel correspondente).
+			Validar a paginação e a pesquisa. Se paginas for zero, preencher com paginação valor padrão.
+			Processe aqui as solicitações da página de listagem.
+			Utilizar a classe de negócio para retornar uma 'lista' de entidades com quantidade de itens limitada pela paginação.
+			Converter a lista de entidades em uma lista de viewmodel (pode utilizar o AutoMapper para facilitar).
+			Retornar essa lista para o usuário.
+
+			Utilizar as chaves de ViewBag/ViewData abaixo para mandar para a view de listagem, ex:
+			ViewBag.PaginaAtual = (int)pagina;
+			ViewBag.Registros = (int)registros;
+			ViewData["Listagem"] = IEnumerable<Modelo>;
+			*/
+
+			return View(modeloPesq);
+		}
+
+		[Route("/@routePrefix/inserir")]
+		[HttpGet]
+		public IActionResult Inserir()
+		{
+			//to-do: implementar
+			/*
+			Criar uma viewmodel vazia e preencher dados iniciais se necessário.
+			Enviar essa viewmodel para o cliente.
+			*/
+			return View();
+		}
+
+		[Route("/@routePrefix/inserir")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Inserir(dynamic modelo)
+		{
+			//to-do: implementar
+			/*
+			Tipar o modelo corretamente (mudar dynamic para classe de viewmodel correspondente).
+			Verificar se o modelo está válido (ModelState.IsValid?).
+			Se for válido:
+				Converter em entidade.
+				Gravar em banco.
+			Se não for válido:
+				Devolver o modelo para conferência.
+			*/
+			return View(modelo);
+		}
+
+		[Route("/@routePrefix/editar/{id?}")]
+		[HttpGet]
+		public IActionResult Editar(int? id)
+		{
+			//to-do: implementar
+			/*
+			Se id for nulo, não será possível editar (retornar NotFound?).
+			Ler a entidade pelo id com a camada de negócio.
+			Converter a entidade em viewmodel.
+			Enviar essa viewmodel para o cliente.
+			*/
+			return View();
+		}
+
+		[Route("/@routePrefix/editar/{id}")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Editar(int? id, dynamic modelo)
+		{
+			//to-do: implementar
+			/*
+			Tipar o modelo corretamente (mudar dynamic para classe de viewmodel correspondente).
+			Verificar se os campos chaves estão preservados, caso necessário.
+			Verificar se o modelo é válido (ModelState.IsValid).
+			Se for válido:
+				Converter em entidade.
+				Gravar em banco, cuidando com a concorrência na hipótese que outro usuário exclua (retornar NotFound?) ou altere antes deste.
+			Se não for válido:
+				Devolver o modelo para conferência.
+			*/
+			return View(modelo);
+		}
+
+		[Route("/@routePrefix/excluir/{id?}")]
+		[HttpPost]
+		public IActionResult Excluir(int? id)
+		{
+			return NoContent();
+		}
+	}
+}
+////-->

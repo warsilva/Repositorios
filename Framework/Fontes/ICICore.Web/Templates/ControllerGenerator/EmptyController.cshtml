@@ -1,0 +1,33 @@
+@using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Controller;
+@using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore
+@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+@{
+}
+////<!--
+using AutoMapper;
+using ICICore.Mvc.Web;
+using ICICore.Mvc.Web.Atributos;
+using ICICore.Mvc.Web.Controllers;
+using ICICore.Web.Configuracoes;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+
+namespace @Model.NamespaceName
+{
+	public class @Model.ClassName : BaseController
+	{
+		public @(Model.ClassName)(IMapper mapper, Config config) : base(mapper, config)
+		{
+		}
+
+		public IActionResult Listar()
+		{
+			return View();
+		}
+	}
+}
+////-->

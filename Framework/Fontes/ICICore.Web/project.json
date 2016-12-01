@@ -1,0 +1,57 @@
+{
+	"version": "1.0.0.0",
+	"userSecretsId": "aspnet-ICICore.Web-7f9bfc97-bc03-43a9-83f2-f22812913a78",
+	"dependencies": {
+		"ICICore.Entidades": "*",
+    "ICICore.Mvc.Web": "1.0.0",
+    "ICICore.Negocio": "*",
+    "Microsoft.AspNetCore.Diagnostics": "1.0.0",
+    "Microsoft.AspNetCore.Razor.Tools": {
+      "version": "1.0.0-preview2-final",
+      "type": "build"
+    },
+		"Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",
+		"Microsoft.AspNetCore.Server.Kestrel": "1.0.1",
+    "Microsoft.Extensions.Configuration.Binder": "1.0.0",
+		"Microsoft.Extensions.Logging.Console": "1.0.0",
+		"Microsoft.VisualStudio.Web.CodeGeneration.Tools": "1.0.0-preview2-update1",
+		"Microsoft.VisualStudio.Web.CodeGenerators.Mvc": "1.0.0-preview2-update1",
+		"NonFactors.Grid.Mvc6": "1.2.0"
+	},
+	"tools": {
+		"BundlerMinifier.Core": "2.0.238",
+		"Microsoft.AspNetCore.Razor.Tools": "1.0.0-preview2-final",
+		"Microsoft.Extensions.SecretManager.Tools": "1.0.0-preview2-final",
+		"Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final",
+		"Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
+		"Microsoft.VisualStudio.Web.CodeGeneration.Tools": {
+			"version": "1.0.0-preview2-update1",
+			"imports": [
+				"portable-net45+win8"
+			]
+		}
+	},
+	"frameworks": {
+		"net462": {}
+	},
+	"buildOptions": {
+		"emitEntryPoint": true,
+		"preserveCompilationContext": true,
+		"copyToOutput": {
+			"includeFiles": [
+				"appsettings.desenvolvimento.json",
+				"appsettings.producao.json",
+				"web.config"
+			]
+		}
+	},
+	"publishOptions": {
+		"include": [
+			"wwwroot",
+			"**/*.cshtml"
+		]
+	},
+	"scripts": {
+		"postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+	}
+}

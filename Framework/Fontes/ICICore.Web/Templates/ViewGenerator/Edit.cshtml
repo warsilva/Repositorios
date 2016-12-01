@@ -1,0 +1,86 @@
+@using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore
+@using System.ComponentModel.DataAnnotations;
+@using ICICore.Mvc.Web;
+@using static ICICore.Web.Templates.ViewGenerator.ViewGerador;
+@@model @Model.ViewDataTypeName
+@{
+if (Model.IsPartialView) {
+} else if (Model.IsLayoutPageSelected) {
+@:@@{
+	@:ViewData["Titulo"] = "Editar";
+	if (!string.IsNullOrEmpty(Model.LayoutPageFile)) {
+		@:Layout = "@Model.LayoutPageFile";
+	}
+@:}
+} else {
+	@:@@{
+		@:Layout = null;
+	@:}
+	@:
+	@:<!DOCTYPE html>
+	@:
+	@:<html>
+	@:<head>
+		@:<meta name="viewport" content="width=device-width" />
+		@:<title>@@ViewData["Titulo"]</title>
+	@:</head>
+	@:<body>
+	@:
+}
+@:<div class="row div-titulo">
+	@:<div class="col-md-12">
+		@:<h2>Edição de <ici-titulo /></h2>
+	@:</div>
+	@:<div class="col-sm-12 col-md-9 col-lg-10">
+		@:<ici-migalha />
+	@:</div>
+@:</div>
+@: 
+@:<form asp-action="editar">
+	@:@@Html.Partial("_Visualizar")
+	@:
+	@:<div class="row">
+		@:<div class="col-md-12 text-right linha-botao">
+			@:<a href="javascript:history.back()" class="btn btn-secundary">Voltar</a>
+			@:<button class="btn btn-secundary" type="button" ici-modal="modalExcluir">Excluir</button>
+			@:<button class="btn btn-primary" type="submit" id="btnSalvar" name="Salvar">Salvar</button>
+		@:</div>
+	@:</div>
+	@:<ici-modal id="modalExcluir" titulo="Exclusão" tamanho="@TamanhoModal.Pequena">
+		@:<ici-modal-body>Deseja realmente excluir?</ici-modal-body>
+		@:<ici-modal-footer>
+			@:<button class="btn btn-secundary" type="button" data-dismiss="modal">Não</button>
+			@:<button class="btn btn-primary" type="submit" id="btnExcluir" name="Excluir" formnovalidate formaction="/@(Model.ViewDataTypeShortName)/Excluir/@@(Model.Id)">Sim</button>
+		@:</ici-modal-footer>
+	@:</ici-modal>
+@:</form>
+@:
+if (Model.ReferenceScriptLibraries) {
+@:@@section Scripts {
+	@:@@{Html.RenderPartial("_ValidationScriptsPartial");}
+@:}
+}
+// The following code closes the tag used in the case of a view using a layout page and the body and html tags in the case of a regular view page
+if (!Model.IsPartialView && !Model.IsLayoutPageSelected) {
+	@:</body>
+	@:</html>
+}
+}
+@functions {
+	/// <summary>
+	/// Verifica se há um uploader dentro da viewmodel.
+	/// Importante verificar, pois havendo um uploader, o tipo de encaminhando do formulário deve mudar para multipart/formdata.
+	/// </summary>
+	/// <returns></returns>
+	bool HasUploaders()
+	{
+		var uploaders = new string[] { DataTypes.Upload, DataTypes.UploadMultiplo };
+
+		var modelType = GetReflectedType();
+
+		return modelType.GetProperties()
+			.SelectMany(p => p.GetCustomAttributes(true)
+			.OfType<DataTypeAttribute>())
+			.Any(p => uploaders.Contains(p.CustomDataType));
+	}
+}

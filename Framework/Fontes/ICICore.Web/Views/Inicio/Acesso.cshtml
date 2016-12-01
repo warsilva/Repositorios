@@ -1,0 +1,32 @@
+﻿@model ICICore.Web.ViewModels.Login
+@{
+	Layout = "_LayoutLogin";
+}
+<h1>Crie seu acesso</h1>
+<form asp-action="Acesso">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div ici-form-group="Usuario">
+				<div class="input-group">
+					<div class="input-group-addon icone-usuario"></div>
+					<input ici-controle="Usuario" asp-for="Usuario">
+				</div>
+			</div>
+			<div ici-form-group="Email">
+				<div class="input-group">
+					<div class="input-group-addon icone-envelope"></div>
+					<input ici-controle="Email" asp-for="Email">
+				</div>
+			</div>
+			<div ici-form-group="Senha">
+				<div class="input-group">
+					<div class="input-group-addon icone-cadeado"></div>
+					<input ici-controle="Senha" asp-for="Senha">
+				</div>
+			</div>
+			<div class="linha-botao">
+				<button class="btn btn-primary btn-block" type="submit">Entrar</button>
+			</div>
+		</div>
+	</div>
+</form>

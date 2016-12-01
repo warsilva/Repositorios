@@ -1,0 +1,174 @@
+@using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore
+@using System.Reflection;
+@using ICICore.Mvc.Web;
+@using DataAnnotations = System.ComponentModel.DataAnnotations;
+@using static ICICore.Web.Templates.ViewGenerator.ViewGerador;
+@{
+	ModelRef = Model;
+	Type modelMetadata = GetReflectedType();
+	IEnumerable<PropertyInfo> properties = modelMetadata.GetProperties();
+	var grid = GridProperties();
+	var pesquisa = PesquisaProperties(grid);
+	var pkNames = GetPrimaryKeyNames();
+}
+@@using static ICICore.Web.Views.ViewExecutor
+@@model @Model.ViewDataTypeName
+@@{
+	var listagem = ViewData["Listagem"] as IEnumerable<@Model.ViewDataTypeName>;
+	var alerta = default(ResultadoOperacao);
+	if (TempData.ContainsKey(nameof(ResultadoOperacao)))
+	{
+		alerta = TempData[nameof(ResultadoOperacao)] as ResultadoOperacao;
+	}
+}
+@{
+	if (Model.IsPartialView) {
+	} else if (Model.IsLayoutPageSelected) {
+@:@@{
+	@:ViewData["Titulo"] = "Listar";
+	if (!string.IsNullOrEmpty(Model.LayoutPageFile)) {
+		@:Layout = "@Model.LayoutPageFile";
+	}
+@:}
+} else {
+	@:@@{
+		@:Layout = null;
+	@:}
+	@:
+	@:<!DOCTYPE html>
+	@:
+	@:<html>
+	@:<head>
+		@:<meta name="viewport" content="width=device-width" />
+		@:<title>@@ViewData["Titulo"]</title>
+	@:</head>
+	@:<body>
+}
+@:<div class="row div-titulo">
+	@:<div class="col-md-12">
+		@:<h2>Consulta de <ici-titulo tipo="@TipoTitulo.Plural" /></h2>
+	@:</div>
+	@:<div class="col-sm-12 col-md-9 col-lg-10">
+		@:<ici-migalha />
+	@:</div>
+	@:<div class="col-sm-12 col-md-3 col-lg-2">
+		@:<a asp-action="Inserir" class="btn btn-primary">+ Novo Cadastro</a>
+	@:</div>
+@:</div>
+@:@@if (alerta != null)
+@:{
+	@:<ici-alerta tipo="alerta.Resultado">@@alerta.Mensagem</ici-alerta>
+@:}
+@:<form asp-action="listar" method="get">
+if(pesquisa.Count() > 0) { 
+	@:<div class="panel panel-default">
+		@:<div class="panel-heading">Filtros de Pesquisa</div>
+		@:<div class="panel-body">
+			@:<div class="row">
+			foreach (var property in pesquisa) {
+				if (IsScaffold(property)) {
+				DataAnnotations.DataTypeAttribute dataType = GetDataType(property);
+
+				@:<div class="col-md-4">
+					if (IsForeignKey(property))
+					{    //usar combo
+						@:<div ici-form-group="@property.Name">
+							@:<label asp-for="@property.Name"></label>
+							@:<select asp-for="@property.Name" asp-items="ViewBag.@property.Name" ici-controle="@property.Name" class="select"></select>
+							@:<span asp-validation-for="@property.Name"></span>
+						@:</div>
+					}
+					else if (IsEnum(property) && !IsEnumFlags(property))
+					{
+						@:<div ici-form-group="@property.Name">
+							@:<label asp-for="@property.Name"></label>
+							@:<select asp-for="@property.Name" asp-items="EnumParaLista(@@Model.@property.Name)" ici-controle="@property.Name" class="select"></select>
+							@:<span asp-validation-for="@property.Name"></span>
+						@:</div>
+					}
+					else if (dataType?.CustomDataType == DataTypes.MultilineText || dataType?.DataType == DataAnnotations.DataType.MultilineText)
+					{
+						@:<div ici-form-group="@property.Name">
+							@:<label asp-for="@property.Name"></label>
+							@:<textarea asp-for="@property.Name" ici-controle="@property.Name"></textarea>
+							@:<span asp-validation-for="@property.Name"></span>
+						@:</div>
+					}
+					else if (dataType?.CustomDataType == DataTypes.CheckBox)
+					{
+						@:<div class="sem-linha" ici-form-group="@property.Name">
+							@:<div class="checkbox">
+								@:<label>
+									@:<input type="checkbox" asp-for="@property.Name" ici-controle="@property.Name" />
+									@:<ici-display-name asp-for="@property.Name" />
+								@:</label>
+							@:</div>
+						@:</div>
+					}
+					else if (dataType?.CustomDataType == DataTypes.Slider)
+					{
+						@:<div class="sem-linha" ici-form-group="@property.Name">
+							@:<label asp-for="@property.Name"></label>
+							@:<input type="range" asp-for="@property.Name" ici-controle="@property.Name" />
+							@:<output></output>
+							@:<span asp-validation-for="@property.Name"></span>
+						@:</div>
+					}
+					else if (dataType?.CustomDataType == DataTypes.Switcher)
+					{
+						@:<div class="sem-linha" ici-form-group="@property.Name">
+							@:<label class="switch">
+								@:<ici-display-name asp-for="@property.Name"/>
+								@:<input type="checkbox" asp-for="@property.Name" ici-controle="@property.Name" />
+								@:<span class="slider round"></span>
+							@:</label>
+						@:</div>
+					}
+					else
+					{
+						@:<div ici-form-group="@property.Name">
+							@:<label asp-for="@property.Name"></label>
+							@:<input type="@(dataType?.CustomDataType ?? "text")" asp-for="@property.Name" ici-controle="@property.Name" />
+							@:<span asp-validation-for="@property.Name"></span>
+						@:</div>
+					}
+				@:</div>
+				}
+			}
+				@:<div class="col-md-4">
+					@:<button class="btn btn-secundary" type="submit">Filtrar</button>
+				@:</div>
+			@:</div>
+		@:</div>
+	@:</div>
+}
+@:</form>
+@:<div class="panel panel-default">
+	@:<div class="panel-heading">Resultados de <ici-titulo tipo="@TipoTitulo.Plural" /></div>
+	@:<div class="panel-body">
+		@:@@(Html
+			@:.Grid(listagem)
+			@:.Build(columns =>
+			@:{
+			foreach (var property in grid) {
+				@:columns.Add(model => model.@property.Name).Titled("@property.Name");
+			}
+			if (pkNames.Count() != 0) {
+				string route = String.Join(", ", pkNames.Select(pk => $"model.{pk}"));
+				@:columns.Add(model => model).Encoded(false).RenderedAs(model => Html.ActionLink("Editar", "Editar", new { @route }));
+			}
+			@:})
+			@:.Sortable()
+			@:.Pageable(pager =>
+			@:{
+				@:pager.CurrentPage = ViewBag.PaginaAtual;
+				@:pager.RowsPerPage = ViewBag.Registros;
+			@:})
+		@:)
+	@:</div>
+@:</div>
+if(!Model.IsPartialView && !Model.IsLayoutPageSelected) {
+	@:</body>
+	@:</html>
+}
+}

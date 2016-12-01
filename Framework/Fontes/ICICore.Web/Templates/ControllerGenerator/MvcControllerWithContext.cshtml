@@ -1,0 +1,275 @@
+﻿@using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Controller;
+@using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
+@using Microsoft.VisualStudio.Web.CodeGeneration.Templating;
+@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+@{
+	#region Inicial
+	var Model2 = Model as ControllerWithContextTemplateModel;
+
+	string routePrefix;
+	if (String.IsNullOrEmpty(Model.AreaName))
+	{
+		routePrefix = Model.ControllerRootName;
+	}
+	else
+	{
+		routePrefix = Model.AreaName + "/" + Model.ControllerRootName;
+	}
+	string routePrefixCamel = routePrefix[0].ToString().ToLower() + routePrefix.Substring(1);
+	var modelProperties = new List<string>();
+	foreach (var property in Model.ModelMetadata.Properties)
+	{
+		if (property.Scaffold)
+		{
+			modelProperties.Add(property.PropertyName);
+		}
+	}
+	var bindString = string.Join(",", modelProperties);
+	var contextTypeName = Model.ContextTypeName;
+	var entitySetName = Model.ModelMetadata.EntitySetName;
+	var entitySetVar = Model.EntitySetVariable ??
+			(String.IsNullOrEmpty(entitySetName)
+				? entitySetName
+				: (entitySetName.Substring(0, length: 1).ToLowerInvariant() + entitySetName.Substring(1)));
+	var primaryKeyName = Model.ModelMetadata.PrimaryKeys[0].PropertyName;
+	var primaryKeyShortTypeName = Model.ModelMetadata.PrimaryKeys[0].ShortTypeName;
+	var primaryKeyType = Model.ModelMetadata.PrimaryKeys[0].TypeName;
+	var primaryKeyNullableTypeName = GetNullableTypeName(primaryKeyType, primaryKeyShortTypeName);
+	var lambdaVar = Model.ModelVariable[0];
+	var relatedProperties = new Dictionary<string, dynamic>();
+	foreach (var nav in Model.ModelMetadata.Navigations)
+	{
+		relatedProperties.Add(nav.AssociationPropertyName, nav);
+	}
+
+	var includeExpressions = "";
+	includeExpressions = String.Join("", relatedProperties.Values.Select(property =>
+	String.Format(".Include({0} => {0}.{1})", lambdaVar, property.AssociationPropertyName)));
+
+	#endregion
+}
+////<!--
+using AutoMapper;
+using ICICore.Mvc.Web;
+using ICICore.Mvc.Web.Atributos;
+using ICICore.Mvc.Web.Controllers;
+using ICICore.Web.Configuracoes;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+
+namespace @Model.ControllerNamespace
+{
+	/// <summary>
+	/// Controlador de '@routePrefix'.
+	/// </summary>
+	public class @Model.ControllerName : BaseController
+	{
+		/// <summary>
+		/// Classe de negócios 'Usuarios'.
+		/// </summary>
+		private Negocio.I@(routePrefix) @routePrefix;
+
+		/// <summary>
+		/// Construtor.
+		/// Atribui as dependências do controller.
+		/// </summary>
+		/// <param name="mapper">Dependência do AutoMapper.</param>
+		/// <param name="config">Dependência do Config.</param>
+		/// <param name="usuarios">Dependência da classe de negócio.</param>
+		public @(routePrefix)Controller(IMapper mapper, Config config, Negocio.I@(routePrefix) @routePrefixCamel) : base(mapper, config)
+		{
+			this.@routePrefix = @routePrefixCamel;
+		}
+
+
+		// GET: @routePrefix
+		[Route("/@routePrefix")]
+		public IActionResult Listar()
+		{
+			return Index(1, null);	//mandar para action mais especializada
+		}
+
+		// GET: @routePrefix/1
+		// GET: @routePrefix/1/30
+		[Route("/@routePrefix/{pagina=1}/{totalPagina?}")]
+		public IActionResult Listar(int pagina, int? totalPagina)
+		{
+			totalPagina = totalPagina ?? Config.Interface.RegistrosPorPagina;
+			var listaEntidade = Negocio.@(routePrefix).Listar(pagina, totalPagina.Value);
+			var listaModelo = Mapper.Map<IEnumerable<Entidades.@(entitySetName)>, IEnumerable<ViewModels.@(entitySetName)>>(listaEntidade);
+			return View(listaModelo);
+		}
+
+		// GET: @routePrefix/Inserir
+		[Route("/@routePrefix/Inserir")]
+		[HttpGet]
+		public IActionResult Inserir()
+		{
+			var entidade = Negocio.@(routePrefix).Criar();
+			var modelo = Mapper.Map<Entidades.@(entitySetName), ViewModels.@(entitySetName)>(entidade);
+			@if (!string.IsNullOrEmpty(primaryKeyType) && IsGuid(primaryKeyType)) {
+				@:modelo.@(primaryKeyName) = Guid.NewGuid();
+			}
+			CriarCombos();
+			return View(modelo);
+		}
+
+		// POST: @routePrefix/Inserir
+		[Route("/@routePrefix/Inserir")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Inserir(ViewModels.@(Model.ModelTypeName) modelo)
+		{
+			if (ModelState.IsValid)
+			{
+				var entidade = Mapper.Map<ViewModels.@(entitySetName), Entidades.@(entitySetName)>(modelo);
+				Negocio.@(routePrefix).Inserir(entidade);
+				return RedirectToAction("Listar");
+			}
+			CriarCombos();
+			return View(modelo);
+		}
+
+		// GET: @routePrefix/Editar/5
+		[Route("/@routePrefix/Editar/{id?}")]
+		[HttpGet]
+		public IActionResult Editar(@(primaryKeyNullableTypeName) id)
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
+			var entidade = Negocio.@(routePrefix).Ler(id.Value);
+			if (entidade == null)
+			{
+				return NotFound();
+			}
+			var modelo = Mapper.Map<Entidades.@(entitySetName), ViewModels.@(entitySetName)>(entidade);
+			CriarCombos();
+			return View(modelo);
+		}
+
+		// POST: @routePrefix/Editar/5
+		[Route("/@routePrefix/Editar/{id}")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Editar(@(primaryKeyShortTypeName) id, ViewModels.@(Model.ModelTypeName) modelo)
+		{
+			if (id != modelo.@(primaryKeyName))
+			{
+				return NotFound();
+			}
+			if (ModelState.IsValid)
+			{
+				var entidade = Mapper.Map<ViewModels.@(entitySetName), Entidades.@(entitySetName)>(modelo);
+				try
+				{
+					Negocio.@(routePrefix).Alterar(entidade);
+				}
+				catch (Negocio.EntidadeDesatualizadaException)
+				{
+					if (!EntidadeExiste(id))
+					{
+						//Entidade @(Model.ModelTypeName) não foi mais encontrada.
+						return NotFound();
+					}
+					else
+					{
+						throw;	//to-do: fazer recarregamento da view ou avisar usuário
+					}
+				}
+				return RedirectToAction("Listar");
+			}
+			CriarCombos();
+			return View(modelo);
+		}
+
+		// GET: @routePrefix/Excluir/5
+		[Route("/@routePrefix/Excluir/{id?}")]
+		[HttpGet]
+		public IActionResult Excluir(@(primaryKeyNullableTypeName) id)
+		{
+			//feito via ajax
+			return NoContent();
+		}
+
+		// POST: @routePrefix/Excluir/5
+		[Route("/@routePrefix/Excluir/{id}")]
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		public IActionResult ExcluirConfirmar(@(primaryKeyShortTypeName) id)
+		{
+			try
+			{
+				Negocio.@(routePrefix).Excluir(id.Value);
+			}
+			catch (Negocio.EntidadeDesatualizadaException)
+			{
+				if (!EntidadeExiste(id))
+				{
+					//Entidade @(Model.ModelTypeName) não foi mais encontrada.
+					return NotFound();
+				}
+				else
+				{
+					throw;	//to-do: fazer recarregamento da view ou avisar usuário
+				}
+			}
+			return RedirectToAction("Listar");
+		}
+
+		/// <summary>
+		/// Cria os combos de relacionamentos comuns usados na edição e inclusão.
+		/// </summary>
+		private void CriarCombos()
+		{
+			@foreach (var property in relatedProperties.Values) {
+				@:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(Negocio.Util.CriarLista<Entidades.@(property.EntitySetName)>());
+			}
+		}
+
+		/// <summary>
+		/// Verifica se existe uma entidade '@routePrefix' previamente gravada através do 'id' informado.
+		/// </summary>
+		/// <param name="id">Código da entidade (chave primária).</param>
+		/// <returns>'true' se a entidade existir; 'false', caso contrário.</returns>
+		private bool EntidadeExiste(@(primaryKeyShortTypeName) id)
+		{
+			return Negocio.@(routePrefix).Ler(id.Value) != null;
+		}
+
+
+	}
+}
+////-->
+@functions
+{
+	// This function converts the primary key short type name to its nullable equivalent when possible. This is required to make
+	// sure that an HTTP 400 error is thrown when the user tries to access the edit, delete, or details action with null values.
+	string GetNullableTypeName(string typeName, string shortTypeName)
+	{
+		// The exceptions are caught because if for any reason the type is user defined, then the short type name will be used.
+		// In that case the user will receive a server error if null is passed to the edit, delete, or details actions.
+		Type primaryKeyType = null;
+		try
+		{
+			primaryKeyType = Type.GetType(typeName);
+		}
+		catch { }
+		if (primaryKeyType != null && (TypeUtilities.IsTypePrimitive(primaryKeyType) || IsGuid(typeName)))
+		{
+			return shortTypeName + "?";
+		}
+		return shortTypeName;
+	}
+
+	bool IsGuid(string typeName)
+	{
+		return String.Equals("System.Guid", typeName, StringComparison.OrdinalIgnoreCase);
+	}
+
+}

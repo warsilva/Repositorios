@@ -1,0 +1,11 @@
+{
+	"version": "1.0.0.0",
+	"dependencies": {
+		"ICICore.Dados": "*",
+		"ICICore.Entidades": "*"
+	},
+	"frameworks": {
+		"net462": {
+		}
+	}
+}

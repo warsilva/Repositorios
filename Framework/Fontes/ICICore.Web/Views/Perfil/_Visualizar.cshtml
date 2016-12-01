@@ -1,0 +1,23 @@
+@using static ICICore.Web.Views.ViewExecutor
+@model ICICore.Web.ViewModels.Perfil
+@{
+    var alerta = default(ResultadoOperacao);
+    if (TempData.ContainsKey(nameof(ResultadoOperacao)))
+    {
+        alerta = TempData[nameof(ResultadoOperacao)] as ResultadoOperacao;
+    }
+}
+@if (alerta != null)
+{
+    <ici-alerta tipo="alerta.Resultado">@alerta.Mensagem</ici-alerta>
+}
+<div class="panel panel-default">
+    <div class="panel-heading">Geral</div>
+    <div class="panel-body">
+        <div ici-form-group="Nome">
+            <label asp-for="Nome"></label>
+            <input asp-for="Nome" ici-controle="Nome" />
+            <span asp-validation-for="Nome"></span>
+        </div>
+    </div>
+</div>
