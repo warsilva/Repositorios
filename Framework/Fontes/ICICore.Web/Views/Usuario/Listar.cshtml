@@ -26,20 +26,24 @@
 {
 	<ici-alerta tipo="alerta.Resultado">@alerta.Mensagem</ici-alerta>
 }
-<form asp-action="listar" method="get">
+
+
+<form asp-action="listar">
 	<div class="panel panel-default">
 		<div class="panel-heading">Filtros de Pesquisa</div>
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-md-4">
-						<div ici-form-group="Nome">
-							<label asp-for="Nome"></label>
-							<input type="select-multiplo" asp-for="Nome" ici-controle="Nome" />
-							<span asp-validation-for="Nome"></span>
-						</div>
+					<div ici-form-group="Nome">
+						<label asp-for="Nome"></label>
+						<input type="select-multiplo" asp-for="Nome" ici-controle="Nome" />
+						<span asp-validation-for="Nome"></span>
+					</div>
 				</div>
-				<div class="col-md-4">
-					<button class="btn btn-secundary" type="submit">Filtrar</button>
+				<div id="content">
+					<div class="col-md-4">
+						<button class="btn btn-secundary" type="submit">Filtrar</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -49,20 +53,20 @@
 	<div class="panel-heading">Resultados de <ici-titulo tipo="Plural" /></div>
 	<div class="panel-body">
 		@(Html
-            .Grid(listagem)
-            .Build(columns =>
-            {
-                columns.Add(model => model.Id).Titled("Id");
-                columns.Add(model => model.Nome).Titled("Nome");
-                columns.Add(model => model).Encoded(false).RenderedAs(model => Html.ActionLink("Editar", "Editar", new { model.Id }));
-                columns.Add(model => model).Encoded(false).RenderedAs(model => Html.ActionLink("Excluir", "excluir", new { model.Id }));
-            })
-            .Sortable()
-            .Pageable(pager =>
-            {
-                pager.CurrentPage = ViewBag.PaginaAtual;
-                pager.RowsPerPage = ViewBag.Registros;
-            })
+						.Grid(listagem)
+						.Build(columns =>
+						{
+							columns.Add(model => model.Id).Titled("Id");
+							columns.Add(model => model.Nome).Titled("Nome");
+							columns.Add(model => model).Encoded(false).RenderedAs(model => Html.ActionLink("Editar", "Editar", new { model.Id }));
+							columns.Add(model => model).Encoded(false).RenderedAs(model => Html.ActionLink("Excluir", "excluir", new { model.Id }));
+						})
+						.Sortable()
+						.Pageable(pager =>
+						{
+							pager.CurrentPage = ViewBag.PaginaAtual;
+							pager.RowsPerPage = ViewBag.Registros;
+						})
 		)
 	</div>
 </div>

@@ -8,7 +8,7 @@ namespace ICICore.Entidades
 		public string Nome { get; set; }
 		public DateTime DataAdmissao { get; set; }
 		public int Status { get; set; }
-        public int PerfilId { get; set; }
-        public Perfil Perfil { get; set; }
+		public int PerfilId { get; set; }
+		public Perfil Perfil { get; set; } = new Perfil();
 	}
 }

@@ -51,7 +51,7 @@ namespace ICICore.Negocio
 		public IQueryable<Entidades.Usuario> ListarPesquisa(string nome)
 		{
 			Dados.Repositorios.Usuario repositorio = new Dados.Repositorios.Usuario();
-			nome = nome?.Trim();
+			nome = nome?.Trim().TrimEnd();
 			return repositorio.Listar(x => {
 				return (nome == null || x.Nome.ToLower().Contains(nome?.ToLower()));
 			});
