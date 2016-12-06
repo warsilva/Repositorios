@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "Facebook": "7.0.6",
+    "Microsoft.AspNet.SignalR": "2.2.1",
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
     "Microsoft.AspNetCore.Mvc": "1.0.1",
     "Microsoft.AspNetCore.Razor.Tools": {
