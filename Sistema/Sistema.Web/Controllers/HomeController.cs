@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Facebook;
 using System.Dynamic;
+using System.Net.Http;
+
+
+
 
 namespace Sistema.Web.Controllers
 {
@@ -16,24 +20,29 @@ namespace Sistema.Web.Controllers
 		{
 			dynamic parameters = new ExpandoObject();
 			parameters.client_id = "1165085896873778";
-			parameters.redirect_uri = "http://localhost:49496/home/retornofb";
+			parameters.redirect_uri = "http://localhost:50748/home/retornofb";
 			parameters.response_type = "code";
 			parameters.display = "page";
-
-			var extendedPermissions = "user_about_me,read_stream,publish_stream";
-			parameters.scope = extendedPermissions;
-
+			//var extendedPermissions = "user_about_me,read_stream,publish_stream";
+			//parameters.scope = extendedPermissions;
 			var _fb = new FacebookClient();
 			var url = _fb.GetLoginUrl(parameters);
-
 			return url.ToString();
 		}
 		public IActionResult Index()
 		{
 			ViewBag.UrlFb = GetFacebookLoginUrl();
 			return View();
-			//return View();
 		}
+
+		public ActionResult RetornoFb()
+		{
+			return RedirectToAction("About");
+		}
+
+
+
+
 
 		public IActionResult About()
 		{
