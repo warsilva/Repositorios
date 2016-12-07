@@ -22,7 +22,7 @@ namespace Sistema.Web.Controllers
 			parameters.client_id = "1165085896873778";
 			parameters.redirect_uri = "http://localhost:50748/home/retornofb";
 			parameters.response_type = "code";
-			parameters.display = "page";
+			parameters.display = "popup";
 			//var extendedPermissions = "user_about_me,read_stream,publish_stream";
 			//parameters.scope = extendedPermissions;
 			var _fb = new FacebookClient();
@@ -35,32 +35,38 @@ namespace Sistema.Web.Controllers
 			return View();
 		}
 
-		public ActionResult RetornoFb()
+		public IActionResult retornofb()
 		{
-			return RedirectToAction("About");
+			var _fb = new FacebookClient();
+			FacebookOAuthResult oauthResult;
+			Uri url = new Uri($"http://localhost:50748/home/retornofb{Request.QueryString.ToString()}");
+			if (_fb.TryParseOAuthCallbackUrl(url, out oauthResult))
+			{
+				//Pega o Access Token "permanente"
+				dynamic parameters = new ExpandoObject();
+				parameters.client_id = "1165085896873778";
+				parameters.redirect_uri = "http://localhost:50748/home/retornofb";
+				parameters.client_secret = "0800d5de424d04dafed1e15c8f11cfad";
+				parameters.code = oauthResult.Code;
+				//dynamic result = _fb.Get("/oauth/access_token", parameters);	
+				//var accessToken = result.access_token;
+
+				//TODO: Guardar no banco
+				//Session.Add("FbUserToken", accessToken);
+				ViewBag.Username = "Warleson";
+				return RedirectToAction("Index", "Chat",new { });
+			}
+			else
+			{
+				// tratar
+				return RedirectToAction("Index");
+			}
+
 		}
-
-
-
-
-
-		public IActionResult About()
+		public IActionResult Chat()
 		{
-			ViewData["Message"] = "Your application description page.";
-
 			return View();
 		}
 
-		public IActionResult Contact()
-		{
-			ViewData["Message"] = "Your contact page.";
-
-			return View();
-		}
-
-		public IActionResult Error()
-		{
-			return View();
-		}
 	}
 }
