@@ -31,8 +31,9 @@ namespace Sistema.Web.Controllers
 		}
 		public IActionResult Index()
 		{
-			ViewBag.UrlFb = GetFacebookLoginUrl();
-			return View();
+			//ViewBag.UrlFb = GetFacebookLoginUrl();
+			//	return View();
+			return RedirectToAction("Index", "Chat", new { });
 		}
 
 		public IActionResult retornofb()
@@ -54,7 +55,7 @@ namespace Sistema.Web.Controllers
 				//TODO: Guardar no banco
 				//Session.Add("FbUserToken", accessToken);
 				ViewBag.Username = "Warleson";
-				return RedirectToAction("Index", "Chat",new { });
+				return RedirectToAction("Index", "Chat", new { });
 			}
 			else
 			{

@@ -8,7 +8,10 @@
 	<environment names="Development">
 		<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
 		<link rel="stylesheet" href="~/css/site.css" />
-
+		<link rel="stylesheet" href="~/Content/angular-flash.css" />
+		<link rel="stylesheet" href="~/Content/bootstrap.icons.css" />
+		<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+		<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="~/css/login.css" />
 	</environment>
@@ -18,11 +21,22 @@
 					asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
 		<link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
 	</environment>
+	<link href="/Content/bootstrap.min.css" rel="stylesheet" />
+	<link href="/Content/font-awesome.min.css" rel="stylesheet" />
+	<link href="/Content/angular-flash.css" rel="stylesheet" />
+	<link href="/Content/bootstrap.icons.css" rel="stylesheet" />
+	<link href="/Content/site.css" rel="stylesheet" />
 
+	<script src="~/Scripts/jquery-1.10.2.js"></script>
+	<script src="~/Scripts/jquery.signalR-2.0.0.js"></script>
+	
+	<script src="~/Scripts/jquery.signalR-2.0.0.min.js"></script>
+	<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
 
 
 </head>
-<body>
+<body ng-app="ChatApp">
+
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<h3 class="panel-title">
@@ -40,7 +54,16 @@
 	</div>
 
 	@RenderBody()
+	<script src="~/ChatScripts/angular.min.js"></script>
+	<script src="~/ChatScripts/underscore-min.js"></script>
+	<script src="~/Scripts/angular-flash.js"></script>
+	<script>
 
+		var app = angular.module("ChatApp", ["flash"]);
+
+	</script>
+	<script src="~/ChatScripts/Factories.js"></script>
+	<script src="~/ChatScripts/headerController.js"></script>
 
 </body>
 
